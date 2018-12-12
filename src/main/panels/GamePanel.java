@@ -4,16 +4,18 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 
 import main.MoneyGame;
 import main.Point;
 import main.grid.HexGrid;
-
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
-
-import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements MouseListener {
 
@@ -23,7 +25,8 @@ public class GamePanel extends JPanel implements MouseListener {
 	private ArrayList<Cell> cells;
 	private Color linkColor;
 	private int cellSize;
-	
+	private BufferedImage reInitImage;
+		
 	private void init() {
 		hg = new HexGrid();
 		links = new ArrayList<Point>();
@@ -32,6 +35,11 @@ public class GamePanel extends JPanel implements MouseListener {
 		cellSize = MoneyGame.SIZE/10;
 		this.generateCells(10);
 		this.addRandomMoneyToAll(5);
+		try {
+			reInitImage = ImageIO.read(new File("src/re-init.png"));
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public GamePanel() {
@@ -140,8 +148,8 @@ public class GamePanel extends JPanel implements MouseListener {
 			g.drawLine(x1, y1, x2, y2);
 		}
 		//Display the re-initiate button
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, 100, 50);
+		g.drawImage(reInitImage, 0, 0, 40, 40, null);
+		
 	}
 
 	@Override
@@ -165,9 +173,19 @@ public class GamePanel extends JPanel implements MouseListener {
 					}
 				}
 			}
-			if(MX < 100 && MY < 50) {
+			
+// TODO:After adding a panel manager check if any of the cells are under zero if not activate a panel that says you've won
+//			for(int i = 0; i < cells.size(); i++) {
+//				if(cells.get(i).getMoney() < 0) {
+//					return;
+//				}
+//				
+//			}
+			
+			if(MX < 40 && MY < 40) {
 				init();
 			}
+			
 			this.repaint();
 		}
 	}
