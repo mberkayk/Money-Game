@@ -1,4 +1,4 @@
-package main.grid;
+package main.panels.gamepanel;
 
 import main.MoneyGame;
 import main.Point;

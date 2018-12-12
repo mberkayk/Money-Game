@@ -1,23 +1,21 @@
-package main.panels;
+package main.panels.gamepanel;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
 
 import main.MoneyGame;
 import main.Point;
-import main.grid.HexGrid;
+import main.panels.Panel;
 
-public class GamePanel extends JPanel implements MouseListener {
+public class GamePanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
 	private HexGrid hg;
@@ -27,13 +25,13 @@ public class GamePanel extends JPanel implements MouseListener {
 	private int cellSize;
 	private BufferedImage reInitImage;
 		
-	private void init() {
+	public void init(int i) {
 		hg = new HexGrid();
 		links = new ArrayList<Point>();
 		cells = new ArrayList<Cell>();
 		linkColor = new Color(255, 255, 255, 70);
 		cellSize = MoneyGame.SIZE/10;
-		this.generateCells(10);
+		this.generateCells(i);
 		this.addRandomMoneyToAll(5);
 		try {
 			reInitImage = ImageIO.read(new File("src/re-init.png"));
@@ -44,15 +42,15 @@ public class GamePanel extends JPanel implements MouseListener {
 	
 	public GamePanel() {
 		super();
+		this.setSize(MoneyGame.WIDTH, MoneyGame.HEIGHT);
 		this.addMouseListener(this);
-		this.init();
+		this.init(10);
 	}
 		
 	private void addCell(int gridIndex) {
 		hg.getGrid()[gridIndex].setCellIndex(cells.size());
 		cells.add(new Cell(hg.getGrid()[gridIndex].x, hg.getGrid()[gridIndex].y, cellSize));
 		hg.getGrid()[gridIndex].setEmpty(false);
-		this.repaint();
 	}
 	
 	private void addLink(int par1, int par2) {
@@ -66,7 +64,7 @@ public class GamePanel extends JPanel implements MouseListener {
 				break;
 			}
 		}
-		//Adding the link doesn't exist
+		//Adding the link if it doesn't exist
 		if(flag) {
 			links.add(new Point(par1, par2));
 			cells.get(par1).addNeighbour(par2);
@@ -174,16 +172,21 @@ public class GamePanel extends JPanel implements MouseListener {
 				}
 			}
 			
-// TODO:After adding a panel manager check if any of the cells are under zero if not activate a panel that says you've won
-//			for(int i = 0; i < cells.size(); i++) {
-//				if(cells.get(i).getMoney() < 0) {
-//					return;
-//				}
-//				
-//			}
+			//Check if any of the cells are below zero
+			boolean isGameWon = true;
+			for(int i = 0; i < cells.size(); i++) {
+				if(cells.get(i).getMoney() < 0) {
+					isGameWon = false;
+				}
+			}
 			
+			//If none of them are below zero then switch to the YOU'VE WON screen
+			if(isGameWon) {
+				MoneyGame.swap("win");
+			}
+			//Re-init button
 			if(MX < 40 && MY < 40) {
-				init();
+				init(10);
 			}
 			
 			this.repaint();
@@ -192,12 +195,10 @@ public class GamePanel extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		
 	}
 
 	@Override

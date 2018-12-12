@@ -1,4 +1,4 @@
-package main.panels;
+package main.panels.gamepanel;
 
 import java.awt.Color;
 import java.awt.Graphics;
