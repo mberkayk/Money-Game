@@ -6,14 +6,12 @@ import java.awt.Graphics;
 import javax.swing.JFrame;
 
 import main.panels.GamePanel;
-import main.panels.SettingsPanel;
 
 public class MoneyGame {
 	
 	public final static int SIZE = 600, WIDTH = SIZE, HEIGHT = SIZE;
 	
 	static JFrame frame;
-	static SettingsPanel sp;
 	static GamePanel gp;
 	Graphics g;
 	public static void main(String[] args) {
