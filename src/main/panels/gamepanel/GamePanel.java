@@ -18,14 +18,19 @@ import main.panels.Panel;
 public class GamePanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
+	
 	private HexGrid hg;
 	private ArrayList<Point> links;
 	private ArrayList<Cell> cells;
 	private Color linkColor;
 	private int cellSize;
-	private BufferedImage reInitImage;
+	
+	private BufferedImage settingsImage;
+	
+	private BufferedImage image;
 		
 	public void init(int i) {
+		
 		hg = new HexGrid();
 		links = new ArrayList<Point>();
 		cells = new ArrayList<Cell>();
@@ -33,17 +38,20 @@ public class GamePanel extends Panel {
 		cellSize = MoneyGame.SIZE/10;
 		this.generateCells(i);
 		this.addRandomMoneyToAll(5);
-		try {
-			reInitImage = ImageIO.read(new File("src/re-init.png"));
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+		
+		image = new BufferedImage(600, 600, BufferedImage.TYPE_INT_ARGB);
+		renderImage();
 	}
 	
 	public GamePanel() {
 		super();
 		this.setSize(MoneyGame.WIDTH, MoneyGame.HEIGHT);
 		this.addMouseListener(this);
+		try {
+			settingsImage = ImageIO.read(new File("src/settings-icon.png"));
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		this.init(10);
 	}
 		
@@ -117,9 +125,9 @@ public class GamePanel extends Panel {
 		}
 	}
 	
-	@Override
-	public void paint(Graphics gr) {
-		Graphics2D g = (Graphics2D)gr;
+	public void renderImage() {
+		Graphics2D g = image.createGraphics();
+		
 		//Background
 		g.setColor(new Color(0, 0, 0));
 		g.fillRect(0, 0, this.getSize().width, this.getSize().height);
@@ -145,52 +153,77 @@ public class GamePanel extends Panel {
 			g.setStroke(new BasicStroke(10));
 			g.drawLine(x1, y1, x2, y2);
 		}
-		//Display the re-initiate button
-		g.drawImage(reInitImage, 0, 0, 40, 40, null);
+		//Display the settings button
+		g.drawImage(settingsImage, 0, 0, 40, 40, null);
+		this.repaint();
+	}
+	
+	@Override
+	public void paint(Graphics gr) {
+		
+		gr.drawImage(image, 0, 0, null);
 		
 	}
-
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		
 		if(e.getButton() == 1) {
+			
 			int MX = e.getX();
 			int MY = e.getY();
+			
 			//Check if any of the cells have been clicked
 			for(int i = 0; i < cells.size(); i++) {
+				
 				int CX = cells.get(i).getX();
 				int CY = cells.get(i).getY();
 				int xDiff = MX - CX;
 				int yDiff = MY - CY;
-				if(xDiff*xDiff + yDiff*yDiff < cellSize*cellSize) {
+				
+				if(xDiff*xDiff + yDiff*yDiff < cellSize/2*cellSize/2) {
+					
 					int neighbourCount = cells.get(i).getNeighbours().size();
+					
+					//Decrement the clicked cell by the number of its neighbours
 					cells.get(i).incrementMoney(-neighbourCount);
+					
 					for(int j = 0; j < neighbourCount; j++) {
+						
 						int cellIndex = cells.get(i).getNeighbours().get(j);
 						cells.get(cellIndex).incrementMoney(1);
+					
 					}
+					
+					this.renderImage();
+					
+					//Check if any of the cells are below zero
+					boolean isGameWon = true;
+					for(int j = 0; j < cells.size(); j++) {
+					
+						if(cells.get(j).getMoney() < 0) {
+							isGameWon = false;
+							break;
+						}
+						
+					}
+					
+					//If none of them are below zero then switch to the YOU'VE WON screen
+					if(isGameWon) {
+						MoneyGame.swap("win");
+					}
+					
+					
 				}
 			}
 			
-			//Check if any of the cells are below zero
-			boolean isGameWon = true;
-			for(int i = 0; i < cells.size(); i++) {
-				if(cells.get(i).getMoney() < 0) {
-					isGameWon = false;
-				}
-			}
-			
-			//If none of them are below zero then switch to the YOU'VE WON screen
-			if(isGameWon) {
-				MoneyGame.swap("win");
-			}
-			//Re-init button
+			//Settings button
 			if(MX < 40 && MY < 40) {
-				init(10);
+				MoneyGame.swap("settings");
 			}
 			
-			this.repaint();
 		}
+		
 	}
 
 	@Override
@@ -211,4 +244,7 @@ public class GamePanel extends Panel {
 		
 	}
 	
+	public BufferedImage getImage() {
+		return image;
+	}
 }

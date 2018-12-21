@@ -9,8 +9,8 @@ public class HexGrid {
 	private Point[] gridPoints;
 	
 	public Point[] generateGrid(int cellSize) {
-		//Generate a grid for the cells
-			//Initialize variables
+		
+		//Initialize variables
 		float k = cellSize*4/9; 				// Coefficient of the size of the lines
 		float ySpace = k * (float)Math.sqrt(3);	// Space between lines
 		float xSpace = k * 6;					// Space between columns

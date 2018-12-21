@@ -17,9 +17,9 @@ public class MoneyGame {
 	
 	static JFrame frame;
 	
-	static GamePanel gp;
+	public static GamePanel gp;
 	static SettingsPanel sp;
-	static WinPanel wp;
+	public static WinPanel wp;
 
 	static JPanel panelManager;
 	

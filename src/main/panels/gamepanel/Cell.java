@@ -1,6 +1,7 @@
 package main.panels.gamepanel;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -43,6 +44,7 @@ public class Cell {
 		g.setColor(cellColor);
 		g.fillOval(x-size/2, y-size/2, size, size);
 		g.setColor(textColor);
+		g.setFont(new Font(null, Font.BOLD, 14));
 		g.drawString(String.valueOf(money), x, y);
 	}
 	
