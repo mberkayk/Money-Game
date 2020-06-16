@@ -28,7 +28,7 @@ public class MoneyGame {
 	Graphics g;
 	public static void main(String[] args) {
 		
-		frame = new JFrame();
+		frame = new JFrame("Money Game");
 		frame.setSize(new Dimension(WIDTH, HEIGHT));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
