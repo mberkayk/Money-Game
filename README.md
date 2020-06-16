@@ -1,2 +1,6 @@
 # Money-Game
-An early version of the game in this video https://www.youtube.com/watch?v=U33dsEcKgeQ
+The game explained in this video https://www.youtube.com/watch?v=U33dsEcKgeQ
+
+##Screenshots
+
+![alt text](screenshots/settings5.png?raw=true)
