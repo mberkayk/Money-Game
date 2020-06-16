@@ -1,6 +1,6 @@
 # Money-Game
 The game explained in this video https://www.youtube.com/watch?v=U33dsEcKgeQ
 
-##Screenshots
+## Screenshots
 
-![alt text](screenshots/settings5.png?raw=true)
+![alt text](screenshots/settings5.png)
